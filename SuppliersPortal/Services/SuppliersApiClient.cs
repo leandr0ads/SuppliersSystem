@@ -19,7 +19,7 @@ public class SuppliersApiClient
         _http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
     }
 
-    // 📦 SUPPLIERS
+    // SUPPLIERS
     public async Task<IEnumerable<SupplierDto>> GetSuppliersAsync()
         => await _http.GetFromJsonAsync<IEnumerable<SupplierDto>>("api/suppliers") ?? [];
 
@@ -30,7 +30,7 @@ public class SuppliersApiClient
         return await response.Content.ReadFromJsonAsync<SupplierDto>();
     }
 
-    // 📦 PRODUCTS
+    // PRODUCTS
     public async Task<IEnumerable<ProductDto>> GetProductsAsync()
         => await _http.GetFromJsonAsync<IEnumerable<ProductDto>>("api/products") ?? [];
 
@@ -41,7 +41,7 @@ public class SuppliersApiClient
         return await response.Content.ReadFromJsonAsync<ProductDto>();
     }
 
-    // 🚚 DELIVERIES
+    // DELIVERIES
     public async Task<IEnumerable<DeliveryDto>> GetDeliveriesAsync()
         => await _http.GetFromJsonAsync<IEnumerable<DeliveryDto>>("api/deliveries") ?? [];
 
