@@ -1,0 +1,55 @@
+﻿@page "/login"
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthApiClient AuthApi
+@inject SuppliersApiClient SuppliersApi
+@inject JwtAuthStateProvider AuthStateProvider
+@inject NavigationManager Navigation
+@using SuppliersPortal.Models
+@using SuppliersPortal.Services
+<h3>Login</h3>
+
+@if (!string.IsNullOrEmpty(Error))
+{
+    <div class="alert alert-danger">@Error</div>
+}
+
+<div class="card p-4 mt-3 shadow-sm" style="max-width: 400px;">
+    <div class="form-group mb-2">
+        <label>Email</label>
+        <input @bind="loginRequest.Email" class="form-control" />
+    </div>
+    <div class="form-group mb-3">
+        <label>Senha</label>
+        <input type="password" @bind="loginRequest.Password" class="form-control" />
+    </div>
+    <button class="btn btn-primary w-100" @onclick="DoLogin">Entrar</button>
+</div>
+
+@code {
+    private LoginRequest loginRequest = new();
+    private string Error = string.Empty;
+
+    private async Task DoLogin()
+    {
+        try
+        {
+            var auth = await AuthApi.LoginAsync(loginRequest);
+
+            if (auth is not null)
+            {
+                await AuthStateProvider.SetUserAsync(auth);
+                SuppliersApi.SetBearerToken(auth.Token);
+                Navigation.NavigateTo("/suppliers");
+            }
+        }
+        catch (Exception ex)
+        {
+            Error = "Falha no login. " + ex.Message;
+        }
+    }
+}

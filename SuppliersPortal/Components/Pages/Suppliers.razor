@@ -1,0 +1,62 @@
+﻿@page "/suppliers"
+@inject SuppliersApiClient Api
+@using SuppliersPortal.Models
+
+<h3>Fornecedores</h3>
+
+@if (supplierDtos is null)
+{
+    <p><em>Carregando fornecedores...</em></p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>CNPJ</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var s in supplierDtos)
+            {
+                <tr>
+                    <td>@s.Name</td>
+                    <td>@s.Cnpj</td>
+                    <td>@s.Email</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h4 class="mt-4">Novo fornecedor</h4>
+    <div class="row">
+        <div class="col-md-3"><input class="form-control" placeholder="Nome" @bind="NewSupplier.Name" /></div>
+        <div class="col-md-3"><input class="form-control" placeholder="CNPJ" @bind="NewSupplier.Cnpj" /></div>
+        <div class="col-md-3"><input class="form-control" placeholder="Email" @bind="NewSupplier.Email" /></div>
+        <div class="col-md-3">
+            <button class="btn btn-success w-100" @onclick="AddSupplier">Adicionar</button>
+        </div>
+    </div>
+}
+
+@code {
+    private List<SupplierDto>? supplierDtos;
+    private CreateSupplierRequest NewSupplier = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        supplierDtos = (await Api.GetSuppliersAsync()).ToList();
+    }
+
+    private async Task AddSupplier()
+    {
+        var created = await Api.CreateSupplierAsync(NewSupplier);
+        if (created != null)
+        {
+            supplierDtos!.Add(created);
+            NewSupplier = new();
+        }
+    }
+}

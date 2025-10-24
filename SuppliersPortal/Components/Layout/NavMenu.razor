@@ -1,0 +1,16 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+
+<nav class="nav flex-column p-3 bg-light shadow-sm" style="height: 100vh;">
+    <h5 class="fw-bold mb-3">Suppliers Portal</h5>
+
+    <AuthorizeView>
+        <Authorized>
+            <a class="nav-link" href="/suppliers">🏢 Fornecedores</a>
+            <a class="nav-link" href="/products">📦 Produtos</a>
+            <a class="nav-link" href="/deliveries">🚚 Entregas</a>
+        </Authorized>
+        <NotAuthorized>
+            <p class="text-muted">Faça login para acessar</p>
+        </NotAuthorized>
+    </AuthorizeView>
+</nav>

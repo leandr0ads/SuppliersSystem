@@ -1,0 +1,42 @@
+﻿@inherits LayoutComponentBase
+@using Microsoft.AspNetCore.Components.Authorization
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="top-row px-4">
+            <AuthorizeView>
+                <Authorized>
+                    <span class="text-muted me-3">
+                        👤 @context.User.Identity?.Name
+                    </span>
+                    <button class="btn btn-outline-danger btn-sm" @onclick="Logout">Logout</button>
+                </Authorized>
+                <NotAuthorized>
+                    <a class="btn btn-outline-primary btn-sm" href="/login">Login</a>
+                </NotAuthorized>
+            </AuthorizeView>
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
+
+@code {
+    [Inject] private AuthenticationStateProvider AuthProvider { get; set; } = default!;
+    [Inject] private NavigationManager Nav { get; set; } = default!;
+
+    private async Task Logout()
+    {
+        if (AuthProvider is JwtAuthStateProvider jwt)
+        {
+            await jwt.SetUserAsync(null);
+        }
+        Nav.NavigateTo("/login", forceLoad: true);
+    }
+}
