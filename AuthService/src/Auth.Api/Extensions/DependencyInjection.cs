@@ -10,11 +10,9 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        // Adiciona MediatR
         services.AddMediatR(cfg =>
             cfg.RegisterServicesFromAssembly(Assembly.Load("Auth.Application")));
 
-        // Adiciona FluentValidation
         services.AddFluentValidationAutoValidation();
         services.AddValidatorsFromAssembly(Assembly.Load("Auth.Application"));
 
